@@ -1,0 +1,6 @@
+/node_modules
+src/main/resources/static/build/
+.vertx
+
+.idea/
+*.iml

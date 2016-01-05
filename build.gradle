@@ -1,0 +1,53 @@
+apply plugin: "kotlin"
+apply plugin: "application"
+apply plugin: "com.github.johnrengelman.shadow"
+
+repositories {
+    jcenter() // for vertx, kotlin
+    maven { url= "http://dl.bintray.com/cy6ergn0m/maven" } // for vertx3-lang-kotlin
+}
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    compile "org.jetbrains.kotlinx:vertx3-lang-kotlin:$vertx_kotlin_version"
+    compile "io.vertx:vertx-core:$vertx_version"
+}
+
+group "zoetro"
+version "1.0-SNAPSHOT"
+sourceCompatibility = 1.8
+
+buildscript {
+    repositories {
+        jcenter() // for kotlin gradle plugin
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "com.github.jengelman.gradle.plugins:shadow:$shadowjar_version"
+    }
+}
+
+sourceSets {
+    main.kotlin.srcDirs += "src/main/kotlin"
+}
+
+mainClassName = "io.vertx.core.Launcher"
+def mainVerticleName = "MainVerticle"
+def watchForChange = "src/**/*.kt"
+def doOnChange = "./gradlew classes"
+
+run {
+    args = ["run", mainVerticleName, "--redeploy=$watchForChange", "--launcher-class=$mainClassName", "--on-redeploy=$doOnChange"]
+}
+
+shadowJar {
+    classifier = "fat"
+
+    manifest {
+        attributes "Main-Verticle": mainVerticleName
+    }
+
+    mergeServiceFiles {
+        include "META-INF/services/io.vertx.core.spi.VerticleFactory"
+    }
+}
+
