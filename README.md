@@ -1,11 +1,11 @@
-= vertx-kotlin-react-bolerplate
+# vertx-kotlin-react-bolerplate
 
-== Requirements
+## Requirements
 
 * Java 8
 * Node.js with npm
 
-== Build
+## Build
 
 ```
 $ git clone https://github.com/zoetrope/vertx-kotlin-react-boilerplate.git
